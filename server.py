@@ -45,7 +45,6 @@ def ocr():
     else:        
         words = detector.detect(file_path)
         if skip_recogniztion==False:
-            recognizer= OpenCVRecognizer("crnn_cs_CN.onnx","alphabet_3944.txt")
             recognizer.recognize(file_path,words,False)
         ret={}
         ret["words"]=words
