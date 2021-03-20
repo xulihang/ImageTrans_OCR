@@ -1,20 +1,44 @@
-def convert_points_of_word_to_box(textline):
+import numpy as np
+
+def convert_boxes_array_to_textlines(boxes_array):
+    textlines=[]
+    for result in boxes_array:
+        line={}
+        index=0
+        for coord in result:
+            line["x"+str(index)]=int(coord[0])
+            line["y"+str(index)]=int(coord[1])
+            index=index+1
+        line["text"]=""
+        textlines.append(line)
+    return textlines
+    
+def convert_textlines_to_boxes_array(textlines):
+    boxes_array=[]
+    for line in textlines:
+        points=[]
+        for i in range(4):
+            points.append([line["x"+str(i)],line["y"+str(i)]])
+        boxes_array.append(np.array(points, dtype = "int16"))
+    return boxes_array
+
+def convert_textline_to_rect(textline):
     minx=textline["x0"]
     maxx=0
     miny=textline["y0"]
     maxy=0
-    box={}
+    rect={}
     for i in range(0,4):
         minx=min(minx,textline["x"+str(i)])
         maxx=max(maxx,textline["x"+str(i)])
         miny=min(miny,textline["y"+str(i)])
         maxy=max(maxy,textline["y"+str(i)])
-    box["x"]=minx
-    box["y"]=miny
-    box["width"]=maxx-minx
-    box["height"]=maxy-miny
-    box["text"]=textline["text"]
-    return box
+    rect["x"]=minx
+    rect["y"]=miny
+    rect["width"]=maxx-minx
+    rect["height"]=maxy-miny
+    rect["text"]=textline["text"]
+    return rect
     
 def convert_words_to_textlines(words):
     words.sort(key=lambda x:x["x0"],reverse=False) #sort boxes based on left

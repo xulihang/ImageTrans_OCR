@@ -6,9 +6,6 @@ import datetime
 import cv2
 from bottle import route, run, template, request, static_file
 import json
-import keras_ocr
-from craft_detector import CRAFTDetector
-from opencv_recognizer import OpenCVRecognizer
     
 @route('/ocr', method='POST')
 def ocr():
@@ -43,17 +40,17 @@ def ocr():
     init_detector(detector_name)
     init_recognizer(recognizer_name)
     
-    words=[]
+    boxes=[]
     if recognize_entire_image==True:        
-        text=recognizer.recognize(file_path,words,recognize_entire_image)
+        text=recognizer.recognize(file_path,boxes,recognize_entire_image)
         os.remove(file_path)
         return text
     else:        
-        words = detector.detect(file_path)
+        boxes = detector.detect(file_path)
         if skip_recogniztion==False:
-            recognizer.recognize(file_path,words,False)
+            recognizer.recognize(file_path,boxes,False)
         ret={}
-        ret["words"]=words
+        ret["boxes"]=boxes
         os.remove(file_path)
         return ret    
 
@@ -62,12 +59,20 @@ def init_detector(name):
     print(name)
     global detector
     if name=="craft" or name==None:
+        from craft_detector import CRAFTDetector
         detector = CRAFTDetector()
+    elif name=="chineseocr":
+        from chineseocr_detector import ChineseOCRDetector
+        detector = ChineseOCRDetector()
         
 def init_recognizer(name):
     global recognizer
     if name=="opencv" or name==None:
+        from opencv_recognizer import OpenCVRecognizer
         recognizer = OpenCVRecognizer("./model/crnn_cs.onnx","./model/alphabet_94.txt")
+    elif name=="chineseocr":
+        from chineseocr_recognizer import ChineseOCRRecognizer
+        recognizer = ChineseOCRRecognizer()
 
 @route('/<filepath:path>')
 def server_static(filepath):

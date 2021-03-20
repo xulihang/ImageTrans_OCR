@@ -14,11 +14,11 @@ class OpenCVRecognizer(Recognizer):
         img = cv.imread(image)
         if recognize_entire_image==False:
             for word in words:
-                box=utils.convert_points_of_word_to_box(word)
-                x=box["x"]
-                y=box["y"]
-                width=box["width"]
-                height=box["height"]
+                rect=utils.convert_textline_to_rect(word)
+                x=rect["x"]
+                y=rect["y"]
+                width=rect["width"]
+                height=rect["height"]
                 cropped = img[y:y+height, x:x+width]
                 word["text"]=self.recognizeOneClip(cropped)
         else:        
