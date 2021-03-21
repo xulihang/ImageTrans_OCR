@@ -51,6 +51,7 @@ class DBNET(metaclass=SingletonType):
 
         img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         h, w = img.shape[:2]
+        
         if h < w:
             scale_h = short_size / h
             tar_w = w * scale_h
@@ -64,8 +65,6 @@ class DBNET(metaclass=SingletonType):
             tar_h = tar_h - tar_h % 32
             tar_h = max(32, tar_h)
             scale_h = tar_h / h
-        
-
 
         img = cv2.resize(img, None, fx=scale_w, fy=scale_h)
 
