@@ -29,7 +29,7 @@ class ChineseOCRDetector(Detector):
         except Exception as ex:
             pass
         
-        if img.width<200:
+        if img.width<200 and img.height<200:
             short_size=196
         short_size = 32 * (short_size//32)        
         img = img.convert("RGB")

@@ -23,11 +23,21 @@ class ChineseOCRRecognizer(Recognizer):
     def recognize(self,image, boxes_list, recognize_entire_image):
         results = self.crnnRecWithBox(np.array(Image.open(image)), convert_textlines_to_boxes_array(boxes_list))
         print(results)
-        index=0
+
+        newBoxes=[]
         for result in results:
-            box=boxes_list[index]
-            box["text"]=result[1]
-            index=index+1
+            #box=boxes_list[index]
+            #box["text"]=result[1]
+            newBox={}
+            index=0           
+            for coord in result[0]:
+                newBox["x"+str(index)]=int(coord[0])
+                newBox["y"+str(index)]=int(coord[1])
+                index=index+1
+            newBox["text"]=result[1]
+            newBoxes.append(newBox)
+        boxes_list.clear()
+        boxes_list.extend(newBoxes)
     
     def crnnRecWithBox(self,im, boxes_list):
         """
