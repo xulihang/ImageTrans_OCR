@@ -6,9 +6,10 @@ import utils
 
 class OpenCVRecognizer(Recognizer):
 
-    def __init__(self,modelPath,vocabularyPath):
+    def __init__(self,modelPath,vocabularyPath,name):
         self.vocabulary=self.readVocabulary(vocabularyPath)
         self.net=cv.dnn.readNetFromONNX(modelPath)
+        self.name=name
     
     def recognize(self, image, words, recognize_entire_image):
         img = cv.imread(image)

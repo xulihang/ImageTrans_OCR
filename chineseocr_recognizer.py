@@ -14,8 +14,9 @@ import traceback
 
 class ChineseOCRRecognizer(Recognizer):
 
-    def __init__(self):
+    def __init__(self,name):
         self.crnn_handle = CRNNHandle(crnn_model_path)
+        self.name = name;
         if angle_detect:
             self.angle_handle = AngleNetHandle(angle_net_path)
         

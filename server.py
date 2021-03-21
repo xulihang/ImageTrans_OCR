@@ -6,6 +6,7 @@ import datetime
 import cv2
 from bottle import route, run, template, request, static_file
 import json
+from config import *
     
 @route('/ocr', method='POST')
 def ocr():
@@ -59,21 +60,27 @@ def ocr():
 def init_detector(name):
     print(name)
     global detector
+    if detector!=None:
+        if detector.name==name:        
+            return
     if name=="craft" or name==None:
         from craft_detector import CRAFTDetector
-        detector = CRAFTDetector()
+        detector = CRAFTDetector(name)
     elif name=="chineseocr":
         from chineseocr_detector import ChineseOCRDetector
-        detector = ChineseOCRDetector()
+        detector = ChineseOCRDetector(name)
         
 def init_recognizer(name):
     global recognizer
+    if recognizer!=None:
+        if recognizer.name==name:        
+            return
     if name=="opencv" or name==None:
         from opencv_recognizer import OpenCVRecognizer
-        recognizer = OpenCVRecognizer("./model/crnn_cs.onnx","./model/alphabet_94.txt")
+        recognizer = OpenCVRecognizer(opencv_model,opencv_alphabet,name)
     elif name=="chineseocr":
         from chineseocr_recognizer import ChineseOCRRecognizer
-        recognizer = ChineseOCRRecognizer()
+        recognizer = ChineseOCRRecognizer(name)
 
 @route('/<filepath:path>')
 def server_static(filepath):

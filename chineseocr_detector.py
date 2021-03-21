@@ -8,8 +8,9 @@ import numpy as np
 
 class ChineseOCRDetector(Detector):
 
-    def __init__(self):
+    def __init__(self,name):
         self.text_handle = DBNET(model_path)
+        self.name = name
         
     def detect(self,img,short_size=960):
         img=Image.open(img)

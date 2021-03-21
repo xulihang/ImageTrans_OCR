@@ -4,8 +4,9 @@ from detector import Detector
 
 class CRAFTDetector(Detector):
 
-    def __init__(self):
+    def __init__(self,name):
         self.detector = keras_ocr.detection.Detector()
+        self.name=name
         
     def detect(self, image):        
         images = [keras_ocr.tools.read(image)]
