@@ -14,6 +14,7 @@ def ocr():
     skip_recogniztion = request.forms.get('skip_recogniztion')
     detector_name = request.forms.get('detector')
     recognizer_name = request.forms.get('recognizer')
+    lang = request.forms.get('lang')
     if recognize_entire_image=="true":
         recognize_entire_image=True
     else:
@@ -80,5 +81,5 @@ def server_static(filepath):
     
 detector = None
 recognizer= None
-run(server="paste",host='127.0.0.1', port=8080)     
+run(server="paste",host='0.0.0.0', port=8080)     
 
