@@ -4,6 +4,7 @@ import os
 import time
 import datetime
 import cv2
+from imagetrans_ocr import ImageTransOCR
 from bottle import route, run, template, request, static_file
 import json
 from config import *
@@ -39,54 +40,22 @@ def ocr():
         os.remove(file_path)
     upload.save(file_path)    
 
-    init_detector(detector_name)
-    init_recognizer(recognizer_name)
-    
-    boxes=[]
+    ocr.init_detector(detector_name)
+    ocr.init_recognizer(recognizer_name)
     if recognize_entire_image==True:        
-        text=recognizer.recognize(file_path,boxes,recognize_entire_image)
+        text=ocr.recognize(file_path)
         os.remove(file_path)
         return text
     else:        
-        boxes = detector.detect(file_path)
-        if skip_recogniztion==False:
-            recognizer.recognize(file_path,boxes,False)
-        ret={}
-        ret["boxes"]=boxes
+        ret=ocr.detect(file_path,skip_recogniztion)
         os.remove(file_path)
         return ret    
 
-
-def init_detector(name):
-    print(name)
-    global detector
-    if detector!=None:
-        if detector.name==name:        
-            return
-    if name=="craft" or name==None:
-        from craft_detector import CRAFTDetector
-        detector = CRAFTDetector(name)
-    elif name=="chineseocr":
-        from chineseocr_detector import ChineseOCRDetector
-        detector = ChineseOCRDetector(name)
-        
-def init_recognizer(name):
-    global recognizer
-    if recognizer!=None:
-        if recognizer.name==name:        
-            return
-    if name=="opencv" or name==None:
-        from opencv_recognizer import OpenCVRecognizer
-        recognizer = OpenCVRecognizer(opencv_model,opencv_alphabet,name)
-    elif name=="chineseocr":
-        from chineseocr_recognizer import ChineseOCRRecognizer
-        recognizer = ChineseOCRRecognizer(name)
 
 @route('/<filepath:path>')
 def server_static(filepath):
     return static_file(filepath, root='www')
     
-detector = None
-recognizer= None
+ocr = ImageTransOCR()
 run(server="paste",host='0.0.0.0', port=8080)     
 

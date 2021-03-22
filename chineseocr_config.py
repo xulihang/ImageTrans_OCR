@@ -17,7 +17,6 @@ is_rgb = True
 crnn_model_path = os.path.join(father_path, "chineseocr_lite/models/crnn_lite_lstm.onnx")
 
 
-
 # angle
 angle_detect = False
 angle_detect_num = 30
