@@ -2,13 +2,14 @@ import numpy as np
 import cv2 as cv
 import math
 from recognizer import Recognizer
+from config import *
 import utils
 
 class OpenCVRecognizer(Recognizer):
 
-    def __init__(self,modelPath,vocabularyPath,name):
-        self.vocabulary=self.readVocabulary(vocabularyPath)
-        self.net=cv.dnn.readNetFromONNX(modelPath)
+    def __init__(self,name):
+        self.vocabulary=self.readVocabulary(opencv_alphabet)
+        self.net=cv.dnn.readNetFromONNX(opencv_model)
         self.name=name
     
     def recognize(self, image, words, recognize_entire_image):

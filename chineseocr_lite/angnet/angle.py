@@ -38,7 +38,6 @@ class AngleNetHandle:
         preds = self.sess.run(["out"], {"input": transformed_image.astype(np.float32)})
 
         pred = np.argmax(preds[0])
-
         return pred
 
     def predict_rbgs(self, imgs):

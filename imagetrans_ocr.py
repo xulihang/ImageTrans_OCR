@@ -1,5 +1,3 @@
-from config import *
-
 class ImageTransOCR():
 
     def __init__(self):
@@ -37,7 +35,7 @@ class ImageTransOCR():
                 return
         if name=="opencv" or name==None:
             from opencv_recognizer import OpenCVRecognizer
-            self.recognizer = OpenCVRecognizer(opencv_model,opencv_alphabet,name)
+            self.recognizer = OpenCVRecognizer(name)
         elif name=="chineseocr":
             from chineseocr_recognizer import ChineseOCRRecognizer
             self.recognizer = ChineseOCRRecognizer(name)
