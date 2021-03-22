@@ -25,7 +25,7 @@ def ocr():
         skip_recogniztion=True
     else:
         skip_recogniztion=False
-        
+    print(recognize_entire_image)
     name, ext = os.path.splitext(upload.filename)
     print(ext.lower())
     if ext.lower() not in ('.png','.jpg','.jpeg'):

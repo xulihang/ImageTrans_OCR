@@ -6,7 +6,7 @@ from chineseocr_lite.dbnet.dbnet_infer import DBNET
 from chineseocr_config import *
 from recognizer import Recognizer
 from PIL import Image
-from utils import convert_textlines_to_boxes_array
+from utils import convert_textlines_to_boxes_array,get_polygon_from_rect
 import numpy as np
 import cv2
 import copy
@@ -21,9 +21,12 @@ class ChineseOCRRecognizer(Recognizer):
             self.angle_handle = AngleNetHandle(angle_net_path)
         
     def recognize(self,image, boxes_list, recognize_entire_image):
-        results = self.crnnRecWithBox(np.array(Image.open(image)), convert_textlines_to_boxes_array(boxes_list))
+        img = Image.open(image)
+        if recognize_entire_image==True:
+            boxes_list.append(get_polygon_from_rect(0,0,img.width,img.height))
+        results = self.crnnRecWithBox(np.array(img), convert_textlines_to_boxes_array(boxes_list))
         print(results)
-
+        text=""
         newBoxes=[]
         for result in results:
             #box=boxes_list[index]
@@ -35,9 +38,11 @@ class ChineseOCRRecognizer(Recognizer):
                 newBox["y"+str(index)]=int(coord[1])
                 index=index+1
             newBox["text"]=result[1]
+            text=text+result[1]
             newBoxes.append(newBox)
         boxes_list.clear()
-        boxes_list.extend(newBoxes)
+        boxes_list.extend(newBoxes)        
+        return text
     
     def crnnRecWithBox(self,im, boxes_list):
         """

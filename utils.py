@@ -1,5 +1,18 @@
 import numpy as np
 
+def get_polygon_from_rect(x,y,width,height):
+    box={}
+    box["x0"]=x
+    box["y0"]=y
+    box["x1"]=x+width
+    box["y1"]=y
+    box["x2"]=x+width
+    box["y2"]=y+height
+    box["x3"]=x
+    box["y3"]=y+height
+    box["text"]=""
+    return box    
+
 def convert_boxes_array_to_textlines(boxes_array):
     textlines=[]
     for result in boxes_array:
