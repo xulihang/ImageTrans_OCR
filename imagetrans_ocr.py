@@ -4,7 +4,7 @@ class ImageTransOCR():
         self.detector = None
         self.recognizer= None
         
-    def detect(self,file_path,skip_recogniztion=False):
+    def do_ocr(self,file_path,skip_recogniztion=False):
         boxes=[]
         boxes = self.detector.detect(file_path)
         if skip_recogniztion==False:
